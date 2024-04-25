@@ -383,6 +383,9 @@ transformer = ColumnTransformer(transformers=[('cat', OneHotEncoder(), [2, 3])],
 #Para aplicar la trasnformacion
 transformacion.fit_transform(x)
 
+#Para obtener los nombres de los proceso, se ocupa:
+names=trasfomer.get_feature_names_out()
+print(names)
 
 ###Pipeline
 
