@@ -114,7 +114,7 @@ print(Hou_new2.shape)
 
 #######################################################################################################
 
-#                                          Codificaciones
+#                                          CODIFICACIONES
 
 ###One hot encoder
 
