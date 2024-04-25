@@ -5,7 +5,9 @@ import matplotlib.pylab as plt
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import scale
+from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import Normalizer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OrdinalEncoder
@@ -116,6 +118,13 @@ print(Hou_new2.shape)
 
 #                                          CODIFICACIONES
 
+#Primero es mejor transformar las columnas que son categoricas que en principio son tipo "object" pasarlas a tipo
+#"category" con columna = columna.astype("category"), esto porque las redes neuronales la interpretan mejor
+
+#Lo ideal antes de codificar es ocupar OneHotEncoder porque las redes neuronales no obtendra relaciones que no corresponden
+#desde una columan de categegoria
+
+
 ###One hot encoder
 
 #Es para columnas categoricas, divide una columna categorica en cierta cantidad de columnas nuevas,
@@ -150,9 +159,7 @@ print(Hou_new1['Yr Sold'].unique().tolist())
 
 #De esta forma se agregan automaticamente al final de la estructura todas las columans creadas
 data1 = pd.get_dummies(data=Hou_new1, columns = ['MS SubClass', 'Mo Sold', 'Yr Sold'])
-print(data1.head())"""
-
-"""
+print(data1.head())
 
 #otra forma de hacerlo es con OneHotEncoder de sklearn, se hace de la siguiente forma para que el
 #output sea un dataframe, este metodo tiene tambien la opcion de poner cuantas categorias, etc
@@ -240,6 +247,7 @@ titanic = sns.load_dataset("titanic")
 titanic.age.fillna(25, inplace=True)                                               
 
 #La formula que ocupa para escalar es:  (x-promedio)/desviacion_standar
+#Lo que hace es que los datos tengan una media = 0 y una desviacion estandard = 1
 
 print(titanic["age"].mean())
 print(titanic["age"].std())
@@ -289,6 +297,63 @@ print(titanic["age"].max())
 MMS = MinMaxScaler()
 
 edad = MMS.fit_transform(titanic[["age"]])
+
+print(edad) 
+
+
+
+### Normalizer
+
+#Normalizar se ocupa para asegurar que ningun elemento sea mayor a la magnitud del vector completo
+
+#Normalizado se refiere a que el vector de datos se multiplica por la norma del vector, hay diferentes normas (L1, L2, etc)
+#por defecto se ocupa norma = x/raiz_cuadrada(x1**2 + x2**2 + x3**2 + etc...)
+
+N1 = Normalizer()
+
+#En este caso el Normalizer trabaja con LAS FILAS y no con la columnas por eso se ocupa la traspuesta
+
+titanic = sns.load_dataset("titanic")
+
+titanic.age.fillna(25, inplace=True) 
+
+edad1 = N1.transform(titanic[["age"]].T)
+
+edad = edad1.T
+
+print(edad.shape)
+
+print(edad)
+
+
+###RobustScaler
+
+#Es parecido a scaler y StandardScaler, tambien dejara la media = 0 y desviacion standard = 1, pero en este caso no ocupa la
+#media sino el rango intercuartil, la formula que ocupa es: (x - rangointercuartilico(x)) / desviacion standard
+#NO da los mismos valores que scaler y StandardScaler, robust es menos afectada por outlier, comprime mas los datos cerca
+#de la media
+
+titanic = sns.load_dataset("titanic")
+
+titanic.age.fillna(25, inplace=True)
+
+print(titanic)
+print(np.median(titanic["age"]))
+iq75, iq25 = np.percentile(titanic["age"],[75,25])
+iqr = iq75 - iq25
+print(iqr)
+print(titanic[["age"]].std())
+
+RS = RobustScaler()
+
+edad = RS.fit_transform(titanic[["age"]])
+
+print(edad.mean())
+print(np.median(edad))
+print(edad.std())
+iq75, iq25 = np.percentile(edad,[75,25])
+iqr = iq75 - iq25
+print(iqr)
 
 print(edad)
 
