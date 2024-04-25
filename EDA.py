@@ -357,6 +357,54 @@ print(iqr)
 
 print(edad)
 
+########################################################################################################################
 
+                                                 #PIPELINE
+                                                 
+#Los pipeline son simplemente aplicaciones multiples, trasformadores y modelos
+
+###ColumnTransformer
+
+#Es simplemente un trasnformador multiple, puede configurar para que solo funcione en ciertas columnas
+#Hace las trasnformaciones que le especifiquemos
+
+from sklearn.compose import ColumnTransformer
+
+#se condifura asi: nombre_trasnformacion, transformacion, numero de las columnas
+transformacion=ColumnTransformer(trasnformers=[("nombre_transformacion", OneHotEncoder(), [0,1])])
+
+#Para poner mas de una transformacion
+t = [('num', SimpleImputer(strategy='median'), [0, 1]), ('cat', SimpleImputer(strategy='most_frequent'), [2, 3])]
+transformer = ColumnTransformer(transformers=t)
+
+#passthrought significa que a las demas columnas las tomara para el output, pero no les hara nada
+transformer = ColumnTransformer(transformers=[('cat', OneHotEncoder(), [2, 3])], remainder='passthrough')
+
+#Para aplicar la trasnformacion
+transformacion.fit_transform(x)
+
+
+###Pipeline
+
+#Con pipeline no solo se puede poner trasnformaciones sino tambien especificar modelos
+#Los hara en orden que le especifiquemos los procesos
+
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+
+model=LogisticRegression()
+
+#Aplicara primero el trasnformador y luego el modelo, pero puede ser incluso dos trasnformaciones o escaladores,
+#pero no se especifica columnas, las aplicaciones se aplican de izquierda a derecha, el trasnformador
+#Puede ser uno en especifico o un ColumnTransformer(), la letra "t" y "m" es un nombre simplemente
+pipe = Pipeline(steps==[("t", transformer), ("m", model)])
+pipe.fit(x, y)
+pipe.predict(x)
+
+o pipe.fit_trasnform(x) #si no es modelo
+
+
+                                                 
+                                            
 
 
