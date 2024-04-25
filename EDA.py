@@ -12,9 +12,18 @@ from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import MinMaxScaler
 
 
+##########################################################################################################################
+
+                                                   #IMPORTANCION ARCHIVOS
+
 housing = pd.read_csv("https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-ML0232EN-SkillsNetwork/asset/Ames_Housing_Data1.tsv", sep='\t')
 
 Hou = pd.DataFrame(housing)
+
+
+##########################################################################################################################
+
+                                                         #LIMPIEZA
 
 print(Hou.shape)
 
