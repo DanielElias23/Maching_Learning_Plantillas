@@ -232,7 +232,8 @@ titanic.embark_town=OE.fit_transform(titanic[["embark_town"]])
  
 ###scale
 
-#este metodo estandariza        
+#este metodo estandariza, los hace oscilar creca de 0, puede contener valores negativos y positivos, puede ser mayores que 1 o 
+#menores que -1    
                                                
 titanic = sns.load_dataset("titanic")
 
@@ -272,7 +273,7 @@ print(edad)
 
 ###MinMaxScaler
 
-#Este metodo es normalizador
+#Este metodo es normalizador, pone los valores entre 0 y 1
 
 titanic = sns.load_dataset("titanic")
 
